@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttybird/main.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -94,6 +93,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
         yield state.copyWith(
           status: GameStatus.gameOver,
+          heighestScore: state.score > state.heighestScore ? state.score : null,
         );
         return;
       }

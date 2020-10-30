@@ -15,7 +15,8 @@ class Obstacle extends StatelessWidget {
       duration: const Duration(milliseconds: 0),
       color: Colors.transparent,
       child: Container(
-        width: MediaQuery.of(context).size.width * Config.obstacleToScreenWidthRatio,
+        width: MediaQuery.of(context).size.width *
+            Config.obstacleToScreenWidthRatio,
         height: height,
         color: Colors.red,
       ),

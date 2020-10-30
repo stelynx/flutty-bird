@@ -1,6 +1,8 @@
 abstract class Config {
+  /// Percentage of bird height to screen height.
   static const double birdToScreenHeightRatio = 0.05;
 
+  /// Bird position in horizontal direction.
   static const double birdPositionX = -0.75;
 
   /// Screen should be refreshed every [deltaTime] milliseconds, so
@@ -10,8 +12,10 @@ abstract class Config {
   /// Initial ratio between [deltaTime] and time increment for position calculation.
   static const double initialGameSpeed = 0.8;
 
+  /// Increase game speed when reaching multiplier of [scoreToIncreaseSpeed].
   static const int scoreToIncreaseSpeed = 20;
 
+  /// Game speed is multiplied by [increaseSpeedRatio] each time it is increased.
   static const double increaseSpeedRatio = 1.02;
 
   /// Vertical speed to be inforced when a jump occurs.
@@ -22,14 +26,19 @@ abstract class Config {
   /// is positive in Alignment notation.
   static const double gravityAccelerationHalved = 4.9;
 
+  /// How many obstacles should be generated, including offscreen ones.
   static const int nObstacles = 3;
 
+  /// Distance between obstacles, expressed in [Alignment] coordinates.
   static const double obstacleDistance = 1.6;
 
+  /// Minimum upper and lower obstacle height with respect to sky.
   static const double minimumObstacleHeightToSky = 0.15;
 
+  /// Width of obstacle with respect to screen width.
   static const double obstacleToScreenWidthRatio = 1 / 8;
 
+  /// Speed of obstacles.
   static const double obstacleSpeed = -1.5;
 
   /// Vertical space between upper and lower obstacle, where a bird can move through,
@@ -45,5 +54,6 @@ abstract class Config {
   /// Total flex parts.
   static const int flexParts = flexSky + flexGround;
 
+  /// Key in local storage for saving and retrieving heighest score.
   static const String sharedPreferencesScoreKey = 'FLUTTYBIRD_SCORE';
 }

@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttybird/config/config.dart';
+
+import '../config/config.dart';
 
 class GameControllerButton extends StatelessWidget {
   final IconData icon;

@@ -2,14 +2,14 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttybird/config/admob_factory.dart';
-import 'package:fluttybird/config/flags.dart';
-import 'package:fluttybird/widgets/game_controller_button.dart';
-import 'package:fluttybird/widgets/game_label.dart';
 
+import '../config/admob_factory.dart';
 import '../config/config.dart';
+import '../config/flags.dart';
 import '../logic/game_bloc.dart';
 import '../widgets/bird.dart';
+import '../widgets/game_controller_button.dart';
+import '../widgets/game_label.dart';
 import '../widgets/obstacle.dart';
 import '../widgets/score.dart';
 

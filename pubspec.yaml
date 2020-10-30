@@ -1,7 +1,7 @@
 name: fluttybird
 description: Addictive "Flappy bird" game implemented in Flutter with
   Flutter-inspired graphics
-version: 1.0.0+2
+version: 1.0.0+3
 
 publish_to: "none"
 
