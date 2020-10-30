@@ -1,0 +1,34 @@
+name: fluttybird
+description: Addictive "Flappy bird" game implemented in Flutter with
+  Flutter-inspired graphics
+version: 1.0.0+2
+
+publish_to: "none"
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.0
+  firebase_admob: ^0.10.0+2
+  firebase_core: ^0.5.0+1
+  flutter_bloc: ^6.0.6
+  flutter_statusbarcolor: ^0.2.3
+  shared_preferences: ^0.5.12+2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.8.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/bird.png
+
+flutter_icons:
+  android: false
+  ios: true
+  image_path: assets/icon.png
