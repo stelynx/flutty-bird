@@ -7,18 +7,25 @@ import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config/admob_factory.dart';
+import 'config/config.dart';
 import 'logic/game_bloc.dart';
+import 'models/rank_score.dart';
 import 'screens/main_screen.dart';
+import 'services/firestore_service.dart';
 
 SharedPreferences _sharedPreferences;
+RankScore _rankScore;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
-  await FirebaseAdMob.instance.initialize(appId: AdMobFactory.getAppId());
-
   _sharedPreferences = await SharedPreferences.getInstance();
+
+  await Firebase.initializeApp();
+  _rankScore = await FirestoreService.getRankAndScore(
+      _sharedPreferences.getString(Config.sharedPreferencesIdKey));
+
+  await FirebaseAdMob.instance.initialize(appId: AdMobFactory.getAppId());
 
   runApp(FluttyBirdApp());
 }
@@ -54,6 +61,7 @@ class _Home extends StatelessWidget {
       create: (_) => GameBloc(
         screenHeight: MediaQuery.of(context).size.height,
         sharedPreferences: _sharedPreferences,
+        globalRankScore: _rankScore,
       ),
       child: MainScreen(),
     );

@@ -5,8 +5,13 @@ import '../config/config.dart';
 class Bird extends StatelessWidget {
   final double positionY;
   final double angle;
+  final bool isQueen;
 
-  const Bird({@required this.positionY, @required this.angle});
+  const Bird({
+    @required this.positionY,
+    @required this.angle,
+    @required this.isQueen,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,7 @@ class Bird extends StatelessWidget {
       child: Transform.rotate(
         angle: angle,
         child: Image.asset(
-          'assets/images/bird.png',
+          isQueen ? 'assets/images/bird_queen.png' : 'assets/images/bird.png',
           width: MediaQuery.of(context).size.height *
               Config.birdToScreenHeightRatio,
         ),

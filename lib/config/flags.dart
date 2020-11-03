@@ -1,7 +1,7 @@
 abstract class Flags {
   /// If banner ads should be enabled.
-  static const bool enableBannerAds = true;
+  static const bool enableBannerAds = false;
 
   /// If rewarded ads should be enabled.
-  static const bool enableRewardedAds = true;
+  static const bool enableRewardedAds = false;
 }

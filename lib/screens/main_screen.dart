@@ -83,6 +83,7 @@ class MainScreen extends StatelessWidget {
                       Bird(
                         angle: state.birdRotationAngle,
                         positionY: state.birdPositionY,
+                        isQueen: state.rankScore?.myRank == 1,
                       ),
                     ],
                   ),
@@ -123,8 +124,18 @@ class MainScreen extends StatelessWidget {
                                 state.status == GameStatus.gameOver,
                           ),
                           GameLabel(
-                              title: 'Best',
-                              value: state.heighestScore.toString()),
+                            title: 'My Best',
+                            value: state.rankScore.myScore.toString(),
+                          ),
+                          GameLabel(
+                            title: 'Global Best',
+                            value:
+                                state.rankScore.globalHeighestScore.toString(),
+                          ),
+                          GameLabel(
+                            title: 'Rank',
+                            value: state.rankScore.myRank.toString(),
+                          ),
                         ],
                       ),
                     ),

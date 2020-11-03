@@ -7,6 +7,8 @@ import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/config.dart';
+import '../models/rank_score.dart';
+import '../services/firestore_service.dart';
 
 part 'game_event.dart';
 part 'game_state.dart';
@@ -16,16 +18,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final double skyHeight;
   final Random random;
   final SharedPreferences sharedPreferences;
-
   Timer timer;
 
   GameBloc({
     @required this.screenHeight,
     @required this.sharedPreferences,
+    @required RankScore globalRankScore,
   })  : skyHeight = screenHeight / Config.flexParts * Config.flexSky,
         random = Random(),
         super(GameState.initial(
-          sharedPreferences.getInt(Config.sharedPreferencesScoreKey) ?? 0,
+          rankScore: globalRankScore,
         ));
 
   void jump() {
@@ -71,7 +73,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     GameEvent event,
   ) async* {
     if (event is InitializeEvent) {
-      yield GameState.initial(state.heighestScore);
+      yield GameState.initial(
+        rankScore: state.rankScore,
+      );
     } else if (event is JumpEvent) {
       yield state.copyWith(
         timeSinceLastJump: 0,
@@ -81,19 +85,29 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       timer.cancel();
       yield state.copyWith(status: GameStatus.paused);
     } else if (event is StartEvent) {
-      if (event.eraseState) yield GameState.initial(state.heighestScore);
+      if (event.eraseState)
+        yield GameState.initial(
+          rankScore: state.rankScore,
+        );
       timer = _newTimer();
     } else if (event is UpdateScreenEvent) {
       // Check collision
       if (state.birdPositionY > 1 || state.birdPositionY < -1) {
         timer.cancel();
-        if (state.score > state.heighestScore) {
-          sharedPreferences.setInt(
-              Config.sharedPreferencesScoreKey, state.score);
+        yield state.copyWith(status: GameStatus.gameOver);
+
+        RankScore rankScore = state.rankScore;
+        if (state.score > state.rankScore.myScore) {
+          final String userId = await FirestoreService.updateScore(
+            state.score,
+            sharedPreferences.getString(Config.sharedPreferencesIdKey),
+          );
+          sharedPreferences.setString(Config.sharedPreferencesIdKey, userId);
+          rankScore = await FirestoreService.getRankAndScore(userId);
         }
+
         yield state.copyWith(
-          status: GameStatus.gameOver,
-          heighestScore: state.score > state.heighestScore ? state.score : null,
+          rankScore: rankScore,
         );
         return;
       }
@@ -104,11 +118,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
       bool collided = false;
       for (int i = 0; i < state.obstaclePositionsX.length; i++) {
-        if ((state.obstaclePositionsX[i] -
-                    Config.birdPositionX -
-                    Config.obstacleToScreenWidthRatio / 2)
-                .abs() >
-            Config.obstacleToScreenWidthRatio) continue;
+        if ((state.obstaclePositionsX[i] +
+                        Config.obstacleToScreenWidthRatio / 2 -
+                        Config.birdPositionX)
+                    .abs() >
+                Config.obstacleToScreenWidthRatio &&
+            (state.obstaclePositionsX[i] -
+                        Config.obstacleToScreenWidthRatio / 2 -
+                        Config.birdPositionX)
+                    .abs() >
+                Config.obstacleToScreenWidthRatio) continue;
 
         if (birdDistanceFromTop < state.upperObstaclesHeight[i] ||
             birdDistanceFromBottom < state.lowerObstaclesHeight[i]) {
@@ -119,13 +138,20 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
       if (collided) {
         timer.cancel();
-        if (state.score > state.heighestScore) {
-          sharedPreferences.setInt(
-              Config.sharedPreferencesScoreKey, state.score);
+        yield state.copyWith(status: GameStatus.gameOver);
+
+        RankScore rankScore = state.rankScore;
+        if (state.score > state.rankScore.myScore) {
+          final String userId = await FirestoreService.updateScore(
+            state.score,
+            sharedPreferences.getString(Config.sharedPreferencesIdKey),
+          );
+          sharedPreferences.setString(Config.sharedPreferencesIdKey, userId);
+          rankScore = await FirestoreService.getRankAndScore(userId);
         }
+
         yield state.copyWith(
-          status: GameStatus.gameOver,
-          heighestScore: state.score > state.heighestScore ? state.score : null,
+          rankScore: rankScore,
         );
         return;
       }
@@ -180,11 +206,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
 
       yield state.copyWith(
+        status: GameStatus.playing,
         birdPositionY: nextBirdPositionY,
         birdRotationAngle: angle,
         gameSpeed: newSpeed,
         score: state.score + (increaseScore ? 1 : 0),
-        refreshBannerAd: increaseScore && state.score % 10 == 0,
+        refreshBannerAd: increaseScore && (state.score + 1) % 10 == 0,
       );
     }
   }

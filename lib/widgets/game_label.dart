@@ -16,14 +16,14 @@ class GameLabel extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: MediaQuery.of(context).size.height / 50,
+            fontSize: MediaQuery.of(context).size.height / 60,
             color: Colors.yellow[50],
           ),
         ),
         Text(
           value,
           style: TextStyle(
-            fontSize: MediaQuery.of(context).size.height / 16,
+            fontSize: MediaQuery.of(context).size.height / 20,
             fontWeight: FontWeight.w100,
             color: Colors.yellow[50],
           ),

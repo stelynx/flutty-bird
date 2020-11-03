@@ -15,8 +15,7 @@ class GameState {
   /// Current score that is incremented every time a user passes an obstacle.
   final int score;
 
-  /// Overall heighest score, obtained from local storage and updated if better.
-  final int heighestScore;
+  final RankScore rankScore;
 
   /// Position of the bird in vertical direction.
   final double birdPositionY;
@@ -45,7 +44,7 @@ class GameState {
   GameState({
     @required this.status,
     @required this.score,
-    @required this.heighestScore,
+    @required this.rankScore,
     @required this.birdPositionY,
     @required this.birdRotationAngle,
     @required this.timeSinceLastJump,
@@ -57,10 +56,13 @@ class GameState {
     @required this.refreshBannerAd,
   });
 
-  factory GameState.initial(int heighestScore) => GameState(
+  factory GameState.initial({
+    @required RankScore rankScore,
+  }) =>
+      GameState(
         status: GameStatus.initial,
         score: 0,
-        heighestScore: heighestScore,
+        rankScore: rankScore,
         birdPositionY: 0,
         birdRotationAngle: 0,
         timeSinceLastJump: 0,
@@ -75,7 +77,7 @@ class GameState {
   GameState copyWith({
     GameStatus status,
     int score,
-    int heighestScore,
+    RankScore rankScore,
     double birdPositionY,
     double birdRotationAngle,
     double timeSinceLastJump,
@@ -84,9 +86,9 @@ class GameState {
     bool refreshBannerAd,
   }) =>
       GameState(
-        status: status ?? GameStatus.playing,
+        status: status ?? this.status,
         score: score ?? this.score,
-        heighestScore: heighestScore ?? this.heighestScore,
+        rankScore: rankScore ?? this.rankScore,
         birdPositionY: birdPositionY ?? this.birdPositionY,
         birdRotationAngle: birdRotationAngle ?? this.birdRotationAngle,
         timeSinceLastJump: timeSinceLastJump ??

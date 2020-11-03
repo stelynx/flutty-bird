@@ -16,7 +16,7 @@ abstract class Config {
   static const int scoreToIncreaseSpeed = 20;
 
   /// Game speed is multiplied by [increaseSpeedRatio] each time it is increased.
-  static const double increaseSpeedRatio = 1.02;
+  static const double increaseSpeedRatio = 1.05;
 
   /// Vertical speed to be inforced when a jump occurs.
   /// The value is negative because upwards is negative in Alignment notation.
@@ -54,6 +54,6 @@ abstract class Config {
   /// Total flex parts.
   static const int flexParts = flexSky + flexGround;
 
-  /// Key in local storage for saving and retrieving heighest score.
-  static const String sharedPreferencesScoreKey = 'FLUTTYBIRD_SCORE';
+  /// Key in local storage representing this device ID.
+  static const String sharedPreferencesIdKey = 'FLUTTYBIRD_USERID';
 }
